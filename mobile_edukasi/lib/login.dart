@@ -1,8 +1,76 @@
-import 'package:flutter/material.dart';
-import 'package:mobile_edukasi/home.dart';
-import 'package:mobile_edukasi/register.dart';
 
-class LoginPage extends StatelessWidget {
+
+import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+import 'package:mobile_edukasi/home.dart';
+import 'package:mobile_edukasi/models/model_login.dart';
+import 'package:mobile_edukasi/register.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:mobile_edukasi/utils/sesion_manager.dart';
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => __LoginPageState();
+}
+
+class __LoginPageState extends State<LoginPage>{
+  var logger = Logger();
+  TextEditingController txtUsername = TextEditingController();
+  Future<ModelLogin?> login() async {
+    logger.d(txtPassword.text);
+    try{
+      isLoading = true;
+      http.Response res = await http.post(Uri.parse('http://192.168.149.55/edukasi/auth.php'),
+        body: {
+          "login"     : "1",
+          "username"  : txtUsername.text,
+          "password"  : txtPassword.text,
+        });
+
+      ModelLogin data = modelLoginFromJson(res.body);
+      logger.d("data :: ${data.pesan}");
+
+      if(data.sukses){
+        setState(() {
+          isLoading=false;
+        });
+        sessionManager.saveSession(
+            data.status,
+            data.data.idUser,
+            data.data.username,
+            data.data.namaUser,
+            data.data.alamatUser,
+            data.data.nohpUser
+        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${data.pesan}')));
+        Navigator.pushAndRemoveUntil(
+            context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            (route) => false
+        );
+      }else{
+        setState(() {
+          isLoading=false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${data.pesan}')));
+      }
+    }catch(e){
+      setState(() {
+        isLoading=false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('eror : ${e.toString()}')));
+    }
+  }
+  TextEditingController txtPassword = TextEditingController();
+
+
+  // GlobalKey<FormState> keyForm =
+  bool isLoading = false;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,6 +87,7 @@ class LoginPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
+                controller: txtUsername,
                 decoration: InputDecoration(
                   labelText: 'Username',
                   border: OutlineInputBorder(),
@@ -30,6 +99,7 @@ class LoginPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
                 obscureText: true,
+                controller: txtPassword,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
@@ -37,21 +107,26 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Tambahkan logika untuk login di sini
-                // Tambahkan navigasi untuk halaman home di sini
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue[900], // Ubah warna tombol di sini
-              ),
-              child: Text('Login', style: TextStyle(color: Colors.white)),
+            Center(
+                child: isLoading
+                    ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+
+                : MaterialButton(
+                  minWidth: 150,
+                  height: 45,
+                  onPressed: () {
+                    logger.d("data");
+
+                    // Tambahkan logika untuk login di sini
+                    // Tambahkan navigasi untuk halaman home di sini
+                    login();
+                  },
+                  color: Colors.blue,
+                  child: Text('Login', style: TextStyle(color: Colors.white)),
+                ),
             ),
-            SizedBox(height: 10),
             GestureDetector(
               onTap: () {
                 // Tambahkan navigasi untuk halaman pendaftaran di sini
