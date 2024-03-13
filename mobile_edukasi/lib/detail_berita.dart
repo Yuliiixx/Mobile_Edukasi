@@ -13,7 +13,7 @@ class PageDetailBerita extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(data!.judul_berita),
+        title: Text(data!.judulBerita),
         backgroundColor: Colors.cyan,
       ),
 
@@ -24,14 +24,14 @@ class PageDetailBerita extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
-                'http://192.168.43.102/edukasi/gambar/${data?.gambar_berita}',
+                'http://192.168.1.75/edukasi/gambar/${data?.gambarBerita}',
                 fit: BoxFit.fill,
               ),
             ),
           ),
 
           ListTile(
-            title: Text(data?.judul_berita ?? "",
+            title: Text(data?.judulBerita ?? "",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16
@@ -42,7 +42,7 @@ class PageDetailBerita extends StatelessWidget {
           Container(
             margin: EdgeInsets.all(10),
             child: Text(
-              data?.konten_berita ?? "",
+              data?.kontenBerita ?? "",
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold

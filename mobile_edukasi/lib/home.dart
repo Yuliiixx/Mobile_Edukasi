@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:mobile_edukasi/detail_berita.dart';
 import 'models/model_berita.dart';
 
@@ -13,12 +14,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var logger = Logger();
 
   String? userName;
 
   Future<List<Datum>?> getBerita() async{
     try{
-      http.Response res = await http.get(Uri.parse('http://192.168.43.102/edukasi/read.php?data=berita'));
+      http.Response res = await http.get(Uri.parse('http://192.168.1.75/edukasi/read.php?data=berita')
+          // , headers: {'Access-Control-Allow-Origin': '*',}
+      );
+      logger.d("data di dapat :: ${modelBeritaFromJson(res.body).data}");
       return modelBeritaFromJson(res.body).data;
     }catch(e){
       setState(() {
@@ -78,10 +83,10 @@ class _HomePageState extends State<HomePage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
-
           child: FutureBuilder(
             future: getBerita(),
             builder: (BuildContext context, AsyncSnapshot<List<Datum>?> snapshot){
+              logger.d("hash data :: ${snapshot.hasData}");
               if(snapshot.hasData){
                 return ListView.builder(
                   itemCount: snapshot.data?.length,
@@ -105,19 +110,19 @@ class _HomePageState extends State<HomePage> {
                                 padding: EdgeInsets.all(8),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
-                                  child: Image.network('http://192.168.43.102/edukasi/gambar/${data?.gambar_berita}',
+                                  child: Image.network('http://192.168.1.75/edukasi/gambar/${data?.gambarBerita}',
                                     fit: BoxFit.fill,
                                   ),
                                 ),
                               ),
                               ListTile(
-                                title: Text("${data?.judul_berita}",
+                                title: Text("${data?.judulBerita}",
                                   style: TextStyle(
                                     color: Colors.green,
                                     fontWeight: FontWeight.bold
                                   ),
                                 ),
-                                subtitle: Text("${data?.konten_berita}",
+                                subtitle: Text("${data?.kontenBerita}",
                                   maxLines: 2,
                                   style: TextStyle(
                                     fontSize: 10,

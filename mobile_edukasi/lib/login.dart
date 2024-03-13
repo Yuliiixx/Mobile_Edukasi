@@ -17,6 +17,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class __LoginPageState extends State<LoginPage>{
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   sessionManager.getSession();
+  //   logger.d(sessionManager.value);
+  // }
   var logger = Logger();
   TextEditingController txtUsername = TextEditingController();
   Future<ModelLogin?> login() async {
@@ -24,7 +32,7 @@ class __LoginPageState extends State<LoginPage>{
     try{
       isLoading = true;
       // http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
-       http.Response res = await http.post(Uri.parse('http://192.168.43.102/edukasi/auth.php'),
+       http.Response res = await http.post(Uri.parse('http://192.168.1.75/edukasi/auth.php'),
         body: {
           "login"     : "1",
           "username"  : txtUsername.text,

@@ -8,79 +8,58 @@ ModelBerita modelBeritaFromJson(String str) => ModelBerita.fromJson(json.decode(
 
 String modelBeritaToJson(ModelBerita data) => json.encode(data.toJson());
 
-
 class ModelBerita {
-  // bool isSuccess;
-  // String message;
-  // List<Datum> data;
   bool sukses;
   int status;
   String pesan;
-  // Data data;
+  List<Datum> data;
 
   ModelBerita({
-    // required this.isSuccess,
-    // required this.message,
-    // required this.data,
     required this.sukses,
     required this.status,
     required this.pesan,
-    // required this.data,
+    required this.data,
   });
 
-  // factory ModelBerita.fromJson(Map<String, dynamic> json) => ModelBerita(
-  //   isSuccess: json["isSuccess"],
-  //   message: json["message"],
-  //   data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-  // );
-factory ModelBerita.fromJson(Map<String, dynamic> json) => ModelBerita(
+  factory ModelBerita.fromJson(Map<String, dynamic> json) => ModelBerita(
     sukses: json["sukses"],
     status: json["status"],
     pesan: json["pesan"],
-    
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
   );
-  
-  get data => null;
 
-
-  
   Map<String, dynamic> toJson() => {
-    // "isSuccess": isSuccess,
-    // "message": message,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
     "sukses": sukses,
     "status": status,
     "pesan": pesan,
-    // "data": data.toJson(),
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
   };
 }
 
 class Datum {
-  String id_berita;
-  String judul_berita;
-  String konten_berita;
-  String gambar_berita;
-
+  String idBerita;
+  String judulBerita;
+  String kontenBerita;
+  String gambarBerita;
 
   Datum({
-    required this.id_berita,
-    required this.judul_berita,
-    required this.konten_berita,
-    required this.gambar_berita,
-    
+    required this.idBerita,
+    required this.judulBerita,
+    required this.kontenBerita,
+    required this.gambarBerita,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id_berita: json["id_berita"],
-    judul_berita: json["judul_berita"],
-    konten_berita: json["konten_berita"],
-    gambar_berita: json["gambar_berita"],
+    idBerita: json["id_berita"],
+    judulBerita: json["judul_berita"],
+    kontenBerita: json["konten_berita"],
+    gambarBerita: json["gambar_berita"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id_berita": id_berita,
-    "judul_berita": judul_berita,
-    "konten_berita": konten_berita,
-    "gambar_berita": gambar_berita,
+    "id_berita": idBerita,
+    "judul_berita": judulBerita,
+    "konten_berita": kontenBerita,
+    "gambar_berita": gambarBerita,
   };
 }
