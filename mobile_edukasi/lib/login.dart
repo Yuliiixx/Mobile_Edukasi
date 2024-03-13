@@ -133,7 +133,7 @@ class __LoginPageState extends State<LoginPage>{
                     // Tambahkan navigasi untuk halaman home di sini
                     login();
                   },
-                  color: Colors.blue,
+                  color: Colors.blue[900],
                   child: Text('Login', style: TextStyle(color: Colors.white)),
                 ),
             ),
