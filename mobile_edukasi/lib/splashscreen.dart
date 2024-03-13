@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_edukasi/bottomNavBar.dart';
+import 'package:mobile_edukasi/galeri.dart';
 import 'package:mobile_edukasi/login.dart';
 import 'dart:async';
 

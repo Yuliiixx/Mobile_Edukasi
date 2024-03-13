@@ -24,7 +24,7 @@ class PageDetailBerita extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
-                'http://192.168.1.75/edukasi/gambar/${data?.gambarBerita}',
+                'http://192.168.43.102/edukasi/gambar/${data?.gambarBerita}',
                 fit: BoxFit.fill,
               ),
             ),

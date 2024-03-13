@@ -24,7 +24,7 @@ class _RegisterPage extends State<RegisterPage> {
     try{
       isLoading = true;
       // http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
-      http.Response res = await http.post(Uri.parse('http://192.168.1.75/edukasi/uth.php'),
+      http.Response res = await http.post(Uri.parse('http://192.168.43.102/edukasi/auth.php'),
         body: {
           "tambah_user":"1",
           "username":txtUsername.text,
@@ -143,7 +143,7 @@ class _RegisterPage extends State<RegisterPage> {
                 // Tambahkan navigasi untuk halaman login di sini
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
+                  MaterialPageRoute(builder: (context) => LoginPage()),
                 );
               },
               child: Text(
