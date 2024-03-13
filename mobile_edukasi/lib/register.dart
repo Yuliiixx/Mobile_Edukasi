@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_edukasi/login.dart';
+import 'package:mobile_edukasi/home.dart';
 import 'models/model_base.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -22,7 +23,8 @@ class _RegisterPage extends State<RegisterPage> {
   Future<ModelBase?> register() async{
     try{
       isLoading = true;
-      http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
+      // http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
+      http.Response res = await http.post(Uri.parse('192.168.43.102/edukasi/auth.php'),
         body: {
           "tambah_user":"1",
           "username":txtUsername.text,
@@ -141,7 +143,7 @@ class _RegisterPage extends State<RegisterPage> {
                 // Tambahkan navigasi untuk halaman login di sini
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  MaterialPageRoute(builder: (context) => HomePage()),
                 );
               },
               child: Text(
