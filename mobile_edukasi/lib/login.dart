@@ -23,7 +23,7 @@ class __LoginPageState extends State<LoginPage>{
     logger.d(txtPassword.text);
     try{
       isLoading = true;
-      http.Response res = await http.post(Uri.parse('http://192.168.149.55/edukasi/auth.php'),
+      http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
         body: {
           "login"     : "1",
           "username"  : txtUsername.text,

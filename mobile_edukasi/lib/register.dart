@@ -1,7 +1,60 @@
-import 'package:flutter/material.dart';
-import 'package:mobile_edukasi/login.dart';
 
-class RegisterPage extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:mobile_edukasi/login.dart';
+import 'models/model_base.dart';
+
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPage();
+}
+
+class _RegisterPage extends State<RegisterPage> {
+  TextEditingController txtNama = TextEditingController();
+  TextEditingController txtAlamat = TextEditingController();
+  TextEditingController txtNoTelpon = TextEditingController();
+  TextEditingController txtUsername = TextEditingController();
+  TextEditingController txtPassword = TextEditingController();
+
+  bool isLoading = false;
+  Future<ModelBase?> register() async{
+    try{
+      isLoading = true;
+      http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
+        body: {
+          "tambah_user":"1",
+          "username":txtUsername.text,
+          "password":txtPassword.text,
+          "nama_user":txtNama.text,
+          "alamat_user":txtAlamat.text,
+          "nohp_user":txtNoTelpon.text
+        });
+      ModelBase data = modelBaseFromJson(res.body);
+      if(data.sukses){
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data.pesan)));
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context)=>LoginPage()),
+                (route) => false);
+      }else{
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data.pesan)));
+      }
+    }catch(e){
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,6 +71,7 @@ class RegisterPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
+                controller: txtNama,
                 decoration: InputDecoration(
                   labelText: 'Nama Lengkap',
                   border: OutlineInputBorder(),
@@ -28,6 +82,7 @@ class RegisterPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
+                controller: txtAlamat,
                 decoration: InputDecoration(
                   labelText: 'Alamat',
                   border: OutlineInputBorder(),
@@ -38,6 +93,7 @@ class RegisterPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
+                controller: txtNoTelpon,
                 decoration: InputDecoration(
                   labelText: 'Nomor Telepon',
                   border: OutlineInputBorder(),
@@ -49,6 +105,7 @@ class RegisterPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
+                controller: txtUsername,
                 decoration: InputDecoration(
                   labelText: 'Username',
                   border: OutlineInputBorder(),
@@ -60,6 +117,7 @@ class RegisterPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
                 obscureText: true,
+                controller: txtPassword,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
@@ -70,6 +128,7 @@ class RegisterPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Tambahkan logika untuk pendaftaran di sini
+                register();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue[900], // Ubah warna tombol di sini
