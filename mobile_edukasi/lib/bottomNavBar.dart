@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_edukasi/home.dart';
+import 'package:mobile_edukasi/galeri.dart';
 
 class BottomNavigation extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   final List<Widget> _pages = [
     HomePage(),
-    GalleryPage(),
+    GaleriPage(),
     EmployeePage(),
     ProfilePage(),
   ];
@@ -54,14 +55,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   }
 }
 
-class GalleryPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Gallery Page'),
-    );
-  }
-}
+
 
 class EmployeePage extends StatelessWidget {
   @override
