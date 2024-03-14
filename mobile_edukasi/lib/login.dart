@@ -8,6 +8,7 @@ import 'package:mobile_edukasi/models/model_login.dart';
 import 'package:mobile_edukasi/register.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile_edukasi/utils/api_url.dart';
 import 'package:mobile_edukasi/utils/sesion_manager.dart';
 
 class LoginPage extends StatefulWidget {
@@ -33,7 +34,7 @@ class __LoginPageState extends State<LoginPage>{
     try{
       isLoading = true;
       // http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
-       http.Response res = await http.post(Uri.parse('http://192.168.1.75/edukasi/auth.php'),
+       http.Response res = await http.post(Uri.parse('${ApiUrl().baseUrl}auth.php'),
         body: {
           "login"     : "1",
           "username"  : txtUsername.text,

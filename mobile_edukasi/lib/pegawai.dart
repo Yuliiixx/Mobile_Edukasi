@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:mobile_edukasi/bottomNavBar.dart';
 import 'package:mobile_edukasi/tambahPegawai.dart';
+import 'package:mobile_edukasi/utils/api_url.dart';
 import 'models/model_pegawai.dart';
 
 class PegawaiPage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _PegawaiPageState extends State<PegawaiPage> {
   Future<void> getPegawaiList() async {
     try {
       http.Response res = await http.get(
-          Uri.parse('http://192.168.1.75/edukasi/read.php?data=pegawai'));
+          Uri.parse('${ApiUrl().baseUrl}read.php?data=pegawai'));
       logger.d("data di dapat :: ${modelPegawaiFromJson(res.body).data}");
       setState(() {
         pegawaiList = modelPegawaiFromJson(res.body).data ?? [];
