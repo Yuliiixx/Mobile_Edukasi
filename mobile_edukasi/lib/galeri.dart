@@ -142,7 +142,12 @@ class _GaleriPageState extends State<GaleriPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Galeri'),
+        title: Text(
+          'Galery',
+          style:
+              TextStyle(color: Colors.white), // Ubah warna teks menjadi putih
+        ),
+        backgroundColor: Colors.blue[900],
       ),
       body: FutureBuilder<List<Datum>?>(
         future: getGaleri(),
