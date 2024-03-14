@@ -2,55 +2,83 @@ import 'package:flutter/material.dart';
 // import 'package:intl/intl.dart';
 import 'models/model_pegawai.dart';
 
-
 class PageDetailPegawai extends StatelessWidget {
   final Datum? data;
 
-  const PageDetailPegawai(this.data, {super.key});
-
+  const PageDetailPegawai(this.data, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(data!.namaPegawai),
-        backgroundColor: Colors.blue,
+        title: Text(
+          data!.namaPegawai,
+          style: TextStyle(
+            color: Colors.white, // Warna putih
+          ),
+        ),
+        backgroundColor: Colors.blue[900],
       ),
-
       body: ListView(
         children: [
           Padding(
             padding: EdgeInsets.all(10),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              // child: Image.network(
-              //   'http://192.168.43.102/edukasi/gambar/${data?.gambarBerita}',
-              //   fit: BoxFit.fill,
-              // ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  title: Text(
+                    'Nama Pegawai : ${data?.namaPegawai ?? ""}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                  key: Key('nama_pegawai'),
+                ),
+                ListTile(
+                  title: Text(
+                    'No bp : ${data?.noBp ?? ""}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                  key: Key('no_bp'),
+                ),
+                ListTile(
+                  title: Text(
+                    'No hp : ${data?.noHp ?? ""}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                  key: Key('no_hp'),
+                ),
+                ListTile(
+                  title: Text(
+                    'Email : ${data?.emailPegawai ?? ""}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                  key: Key('email'),
+                ),
+                ListTile(
+                  title: Text(
+                    'Created at : ${data?.created_date ?? ""}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                    ),
+                  ),
+                  key: Key('created_date'),
+                ),
+              ],
             ),
           ),
-
-          ListTile(
-            title: Text(data?.namaPegawai ?? "",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16
-              ),
-            ),
-           
-          ),
-          Container(
-            margin: EdgeInsets.all(10),
-            child: 
-            Text(
-              data?.noBp ?? "",
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold
-              ),
-            ),
-            
-          )
         ],
       ),
     );
