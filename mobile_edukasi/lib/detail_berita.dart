@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_edukasi/utils/api_url.dart';
 // import 'package:intl/intl.dart';
 import 'models/model_berita.dart';
 
@@ -26,7 +27,7 @@ class PageDetailBerita extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
-                'http://192.30.35.126/edukasi/gambar/${data?.gambarBerita}',
+                '${ApiUrl().baseUrl}gambar/${data?.gambarBerita}',
                 fit: BoxFit.fill,
               ),
             ),

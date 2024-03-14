@@ -42,7 +42,8 @@ class _EditUser extends State<EditUser> {
       // http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
       http.Response res = await http.post(Uri.parse('${ApiUrl().baseUrl}auth.php'),
         body: {
-          "tambah_user":"1",
+          "edit_user":"1",
+          "id_user" : sessionManager.idUser,
           "username":txtUsername.text,
           "password":txtPassword.text,
           "nama_user":txtNama.text,
@@ -54,11 +55,16 @@ class _EditUser extends State<EditUser> {
         setState(() {
           isLoading = false;
         });
+        sessionManager.saveSession(
+            data.sukses,
+            sessionManager.idUser as String,
+            txtUsername.text,
+            txtNama.text,
+            txtAlamat.text,
+            txtNoTelpon.text
+        );
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data.pesan)));
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context)=>LoginPage()),
-                (route) => false);
+        Navigator.of(context).pop();
       }else{
         setState(() {
           isLoading = false;
