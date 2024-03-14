@@ -30,7 +30,7 @@ class _PegawaiPageState extends State<PegawaiPage> {
   Future<void> getPegawaiList() async {
     try {
       http.Response res = await http.get(
-          Uri.parse('http://192.168.43.102/edukasi/read.php?data=pegawai'));
+          Uri.parse('http://192.30.35.126/edukasi/read.php?data=pegawai'));
       logger.d("data di dapat :: ${modelPegawaiFromJson(res.body).data}");
       setState(() {
         pegawaiList = modelPegawaiFromJson(res.body).data ?? [];
@@ -101,7 +101,7 @@ class _PegawaiPageState extends State<PegawaiPage> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 // child: Image.network(
-                                //   'http://192.168.43.102/edukasi/gambar/${data?.gambarBerita}',
+                                //   'http://192.30.35.126/edukasi/gambar/${data?.gambarBerita}',
                                 //   fit: BoxFit.fill,
                                 // ),
                               ),

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:mobile_edukasi/login.dart';
 import 'package:mobile_edukasi/utils/sesion_manager.dart';
 
 class Profil extends StatefulWidget {
@@ -58,14 +59,14 @@ class _Profil extends State<Profil> {
             ),
             SizedBox(height: 20),
             Text(
-              '$nama',
+              '${sessionManager.fullname}',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              '$username',
+              '${sessionManager.userName}',
               style: TextStyle(
                 fontSize: 16,
               ),
@@ -78,7 +79,7 @@ class _Profil extends State<Profil> {
               ),
             ),
             Text(
-              '$noHp',
+              '${sessionManager.nohp}',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -92,7 +93,7 @@ class _Profil extends State<Profil> {
               ),
             ),
             Text(
-              '$alamat',
+              '${sessionManager.alamat}',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -103,7 +104,14 @@ class _Profil extends State<Profil> {
               child: MaterialButton(
                 minWidth: 150,
                 height: 45,
-                onPressed: () {},
+                onPressed: () {
+                  sessionManager.clearSession();
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                          (route) => false
+                  );
+                },
                 color: Colors.red[900],
                 child: Text('Logout', style: TextStyle(color: Colors.white)),
               ),
