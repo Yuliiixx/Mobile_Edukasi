@@ -1,9 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:mobile_edukasi/detail_pegawai.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import 'package:mobile_edukasi/detail_pegawai.dart';
 import 'package:mobile_edukasi/bottomNavBar.dart';
+import 'package:mobile_edukasi/tambahPegawai.dart';
 import 'models/model_pegawai.dart';
 
 class PegawaiPage extends StatefulWidget {
@@ -30,7 +30,7 @@ class _PegawaiPageState extends State<PegawaiPage> {
   Future<void> getPegawaiList() async {
     try {
       http.Response res = await http.get(
-          Uri.parse('http://192.30.35.126/edukasi/read.php?data=pegawai'));
+          Uri.parse('http://192.168.43.102/edukasi/read.php?data=pegawai'));
       logger.d("data di dapat :: ${modelPegawaiFromJson(res.body).data}");
       setState(() {
         pegawaiList = modelPegawaiFromJson(res.body).data ?? [];
@@ -59,8 +59,9 @@ class _PegawaiPageState extends State<PegawaiPage> {
       appBar: AppBar(
         title: Text(
           'Pegawai',
-          style:
-              TextStyle(color: Colors.white), // Ubah warna teks menjadi putih
+          style: TextStyle(
+            color: Colors.white,
+          ), // Ubah warna teks menjadi putih
         ),
         backgroundColor: Colors.blue[900],
       ),
@@ -133,6 +134,19 @@ class _PegawaiPageState extends State<PegawaiPage> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TambahDataPegawai()),
+          );
+        },
+        child: Icon(
+          Icons.add,
+          color: Colors.white, // Mengatur warna ikon menjadi putih
+        ),
+        backgroundColor: Colors.blue[900],
       ),
     );
   }

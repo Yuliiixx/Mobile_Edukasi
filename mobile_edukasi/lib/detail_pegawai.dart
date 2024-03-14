@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_edukasi/editPegawai.dart';
 // import 'package:intl/intl.dart';
 import 'models/model_pegawai.dart';
 
@@ -18,6 +19,29 @@ class PageDetailPegawai extends StatelessWidget {
           ),
         ),
         backgroundColor: Colors.blue[900],
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            color: Colors.white, // Warna putih
+            onPressed: () {
+              // Navigasi ke layar pengeditan data
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditDataPegawai(data),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.delete),
+            color: Colors.white, // Warna putih
+            onPressed: () {
+              // Implementasi logika untuk menghapus data pegawai
+              // Misalnya, menampilkan dialog konfirmasi penghapusan
+            },
+          ),
+        ],
       ),
       body: ListView(
         children: [
