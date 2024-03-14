@@ -24,7 +24,7 @@ class _RegisterPage extends State<RegisterPage> {
     try{
       isLoading = true;
       // http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
-      http.Response res = await http.post(Uri.parse('http://192.168.43.102/edukasi/auth.php'),
+      http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
         body: {
           "tambah_user":"1",
           "username":txtUsername.text,

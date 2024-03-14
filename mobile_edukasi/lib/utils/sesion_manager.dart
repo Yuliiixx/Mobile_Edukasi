@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SessionManager{
-  int? value;
+  bool? value;
   String? idUser;
   String? userName;
   String? fullname;
@@ -9,24 +9,24 @@ class SessionManager{
   String? nohp;
 
   //simpan sesi
-  Future<void> saveSession(int val, String id, String userName, String fullName, String alamat, String nohp) async{
+  Future<void> saveSession(bool val, String id, String userName, String fullName, String alamat, String nohp) async{
     SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setInt("value", val);
-    pref.setString("id", id);
+    pref.setBool("sukses", val);
+    pref.setString("id_user", id);
     pref.setString("username", userName);
-    pref.setString("fullname", fullName);
-    pref.setString("alamat", alamat);
-    pref.setString("nohp", nohp);
+    pref.setString("nama_user", fullName);
+    pref.setString("alamat_user", alamat);
+    pref.setString("nohp_user", nohp);
   }
 
   Future getSession() async{
     SharedPreferences pref = await SharedPreferences.getInstance();
-    value = pref.getInt("value");
-    idUser = pref.getString("id");
+    value = pref.getBool("sukses");
+    idUser = pref.getString("id_user");
     userName = pref.getString("username");
-    fullname = pref.getString("fullname");
-    alamat =  pref.getString("alamat");
-    nohp = pref.getString("nohp");
+    fullname = pref.getString("nama_user");
+    alamat =  pref.getString("alamat_user");
+    nohp = pref.getString("nohp_user");
   }
   //remove --> logout
   Future clearSession() async{

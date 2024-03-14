@@ -33,7 +33,7 @@ class __LoginPageState extends State<LoginPage>{
     try{
       isLoading = true;
       // http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
-       http.Response res = await http.post(Uri.parse('http://192.168.43.102/edukasi/auth.php'),
+       http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
         body: {
           "login"     : "1",
           "username"  : txtUsername.text,
@@ -46,21 +46,27 @@ class __LoginPageState extends State<LoginPage>{
       if(data.sukses){
         setState(() {
           isLoading=false;
+
+          sessionManager.saveSession(
+              data.sukses,
+              data.data.idUser,
+              data.data.username,
+              data.data.namaUser,
+              data.data.alamatUser,
+              data.data.nohpUser
+          );
+          sessionManager.getSession();
+          sessionManager.getSession().then((value) {
+            logger.d("nama :: ${sessionManager.userName}");
+          });
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${data.pesan}')));
+          Navigator.pushAndRemoveUntil(
+              context,
+                MaterialPageRoute(builder: (context) => BottomNavigation()),
+              (route) => false
+          );
         });
-        sessionManager.saveSession(
-            data.status,
-            data.data.idUser,
-            data.data.username,
-            data.data.namaUser,
-            data.data.alamatUser,
-            data.data.nohpUser
-        );
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${data.pesan}')));
-        Navigator.pushAndRemoveUntil(
-            context,
-              MaterialPageRoute(builder: (context) => BottomNavigation()),
-            (route) => false
-        );
+
       }else{
         setState(() {
           isLoading=false;

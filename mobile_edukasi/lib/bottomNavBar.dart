@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_edukasi/home.dart';
 import 'package:mobile_edukasi/galeri.dart';
 import 'package:mobile_edukasi/pegawai.dart';
+import 'package:mobile_edukasi/profil.dart';
 
 class BottomNavigation extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     HomePage(),
     GaleriPage(),
     PegawaiPage(),
-    ProfilePage(),
+    Profil(),
   ];
 
   void _onItemTapped(int index) {
@@ -27,7 +28,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
@@ -57,14 +57,3 @@ class _BottomNavigationState extends State<BottomNavigation> {
 }
 
 
-
-
-
-class ProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Profile Page'),
-    );
-  }
-}

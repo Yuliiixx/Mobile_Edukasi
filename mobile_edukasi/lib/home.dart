@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:mobile_edukasi/detail_berita.dart';
 import 'package:mobile_edukasi/bottomNavBar.dart';
+import 'package:mobile_edukasi/utils/sesion_manager.dart';
 import 'models/model_berita.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,9 +20,10 @@ class _HomePageState extends State<HomePage> {
   String? userName;
 
   Future<List<Datum>?> getBerita() async {
+
     try {
       http.Response res = await http
-          .get(Uri.parse('http://192.168.43.102/edukasi/read.php?data=berita')
+          .get(Uri.parse('http://192.30.35.126/edukasi/read.php?data=berita')
               // , headers: {'Access-Control-Allow-Origin': '*',}
               );
       logger.d("data di dapat :: ${modelBeritaFromJson(res.body).data}");
@@ -95,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
-                                    'http://192.168.43.102/edukasi/gambar/${data?.gambarBerita}',
+                                    'http://192.30.35.126/edukasi/gambar/${data?.gambarBerita}',
                                     fit: BoxFit.fill,
                                   ),
                                 ),

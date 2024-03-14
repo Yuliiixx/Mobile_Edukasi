@@ -21,7 +21,7 @@
 //   Future<List<Datum>?> getGaleri() async {
 //     try {
 //       http.Response res = await http
-//           .get(Uri.parse('http://192.168.43.102/edukasi/read.php?data=galeri')
+//           .get(Uri.parse('http://192.30.35.126/edukasi/read.php?data=galeri')
 //               // , headers: {'Access-Control-Allow-Origin': '*',}
 //               );
 //       logger.d("data di dapat :: ${modelGaleriFromJson(res.body).data}");
@@ -70,7 +70,7 @@
 //                                 child: ClipRRect(
 //                                   borderRadius: BorderRadius.circular(10),
 //                                   child: Image.network(
-//                                     'http://192.168.43.102/edukasi/gambar/${data?.foto}',
+//                                     'http://192.30.35.126/edukasi/gambar/${data?.foto}',
 //                                     fit: BoxFit.fill,
 //                                   ),
 //                                 ),
@@ -114,7 +114,7 @@ class GaleriPage extends StatefulWidget {
 class _GaleriPageState extends State<GaleriPage> {
   Future<List<Datum>?> getGaleri() async {
     // Endpoint API galeri
-    String apiUrl = 'http://192.168.43.102/edukasi/read.php?data=galeri'; // Ganti dengan URL API yang sesuai
+    String apiUrl = 'http://192.30.35.126/edukasi/read.php?data=galeri'; // Ganti dengan URL API yang sesuai
     
     try {
       // Melakukan request HTTP GET ke API
@@ -169,7 +169,7 @@ class _GaleriPageState extends State<GaleriPage> {
               itemCount: galeri.length,
               itemBuilder: (BuildContext context, int index) {
                 return Image.network(
-                  'http://192.168.43.102/edukasi/gambar/${galeri[index].foto}',
+                  'http://192.30.35.126/edukasi/gambar/${galeri[index].foto}',
                   fit: BoxFit.cover,
                 );
               },
