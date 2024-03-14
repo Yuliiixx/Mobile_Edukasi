@@ -106,11 +106,38 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_edukasi/models/model_galeri.dart';
 import 'package:mobile_edukasi/utils/api_url.dart'; // Sesuaikan dengan lokasi file model_galeri.dart
-
+import 'package:photo_view/photo_view.dart';
 class GaleriPage extends StatefulWidget {
   @override
   _GaleriPageState createState() => _GaleriPageState();
 }
+
+class ZoomableImage extends StatelessWidget {
+  final String imageUrl;
+
+  ZoomableImage({required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Container(
+          color: Colors.black,
+          child: PhotoView(
+            imageProvider: NetworkImage(imageUrl),
+            backgroundDecoration: BoxDecoration(color: Colors.black),
+            minScale: PhotoViewComputedScale.contained,
+            maxScale: PhotoViewComputedScale.covered * 2.0,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 class _GaleriPageState extends State<GaleriPage> {
   Future<List<Datum>?> getGaleri() async {
@@ -174,10 +201,18 @@ class _GaleriPageState extends State<GaleriPage> {
               ),
               itemCount: galeri.length,
               itemBuilder: (BuildContext context, int index) {
-                return Image.network(
+                return GestureDetector(
+                    onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ZoomableImage(imageUrl: '${ApiUrl().baseUrl}gambar/${galeri[index].foto}'),
+                    ),
+                  );
+                },child : Image.network(
                   '${ApiUrl().baseUrl}gambar/${galeri[index].foto}',
                   fit: BoxFit.cover,
-                );
+                ));
               },
             );
           }
