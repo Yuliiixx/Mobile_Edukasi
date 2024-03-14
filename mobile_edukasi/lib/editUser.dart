@@ -3,21 +3,36 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_edukasi/login.dart';
 import 'package:mobile_edukasi/home.dart';
+import 'package:mobile_edukasi/utils/sesion_manager.dart';
 import 'models/model_base.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class EditUser extends StatefulWidget {
+  const EditUser({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPage();
+  State<EditUser> createState() => _EditUser();
 }
 
-class _RegisterPage extends State<RegisterPage> {
-  TextEditingController txtNama = TextEditingController();
-  TextEditingController txtAlamat = TextEditingController();
-  TextEditingController txtNoTelpon = TextEditingController();
-  TextEditingController txtUsername = TextEditingController();
+class _EditUser extends State<EditUser> {
+  TextEditingController txtNama = TextEditingController(text: '${sessionManager.fullname}');
+  TextEditingController txtAlamat = TextEditingController(text: '${sessionManager.alamat}');
+  TextEditingController txtNoTelpon = TextEditingController(text: '${sessionManager.nohp}');
+  TextEditingController txtUsername = TextEditingController(text: '${sessionManager.userName}');
   TextEditingController txtPassword = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    sessionManager.getSession();
+    sessionManager.getSession().then((value) {
+      // logger.d("alamat :: ${sessionManager.alamat}");
+      // nama = sessionManager.fullname;
+      // username = sessionManager.userName;
+      // alamat = sessionManager.alamat;
+      // noHp = sessionManager.nohp;
+    });
+  }
 
   bool isLoading = false;
   Future<ModelBase?> register() async{
@@ -60,15 +75,18 @@ class _RegisterPage extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Edit User'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 50),
-            Image.asset(
-              'images/logo.png', // Ganti dengan path gambar logo Anda
-              height: 150,
-              width: 150,
-            ),
             SizedBox(height: 30),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -135,24 +153,7 @@ class _RegisterPage extends State<RegisterPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue[900], // Ubah warna tombol di sini
               ),
-              child: Text('Register', style: TextStyle(color: Colors.white)),
-            ),
-            SizedBox(height: 10),
-            GestureDetector(
-              onTap: () {
-                // Tambahkan navigasi untuk halaman login di sini
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-              child: Text(
-                'Sudah punya akun? Silahkan login',
-                style: TextStyle(
-                  color: Colors.blue[900],
-                  decoration: TextDecoration.underline,
-                ),
-              ),
+              child: Text('Edit', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),

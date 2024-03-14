@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:mobile_edukasi/editUser.dart';
 import 'package:mobile_edukasi/login.dart';
 import 'package:mobile_edukasi/utils/sesion_manager.dart';
 
@@ -123,7 +124,12 @@ class _Profil extends State<Profil> {
               child: MaterialButton(
                 minWidth: 150,
                 height: 45,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => EditUser())
+                  );
+                },
                 color: Colors.amber[900],
                 child: Text(
                   'Edit Profil',

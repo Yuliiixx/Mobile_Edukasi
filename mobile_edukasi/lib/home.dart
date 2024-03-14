@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   Future<List<Datum>?> getBerita() async {
     try {
       http.Response res = await http
-          .get(Uri.parse('http://192.168.43.102/edukasi/read.php?data=berita'));
+          .get(Uri.parse('http://192.168.1.75/edukasi/read.php?data=berita'));
       logger.d("data di dapat :: ${modelBeritaFromJson(res.body).data}");
       return modelBeritaFromJson(res.body).data;
     } catch (e) {
@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
                                       child: Image.network(
-                                        'http://192.168.43.102/edukasi/gambar/${dataItem?.gambarBerita}',
+                                        'http://192.168.1.75/edukasi/gambar/${dataItem?.gambarBerita}',
                                         fit: BoxFit.fill,
                                       ),
                                     ),

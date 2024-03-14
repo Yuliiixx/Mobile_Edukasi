@@ -114,7 +114,7 @@ class GaleriPage extends StatefulWidget {
 class _GaleriPageState extends State<GaleriPage> {
   Future<List<Datum>?> getGaleri() async {
     // Endpoint API galeri
-    String apiUrl = 'http://192.168.43.102/edukasi/read.php?data=galeri'; // Ganti dengan URL API yang sesuai
+    String apiUrl = 'http://192.168.1.75/edukasi/read.php?data=galeri'; // Ganti dengan URL API yang sesuai
     
     try {
       // Melakukan request HTTP GET ke API
@@ -174,7 +174,7 @@ class _GaleriPageState extends State<GaleriPage> {
               itemCount: galeri.length,
               itemBuilder: (BuildContext context, int index) {
                 return Image.network(
-                  'http://192.168.43.102/edukasi/gambar/${galeri[index].foto}',
+                  'http://192.168.1.75/edukasi/gambar/${galeri[index].foto}',
                   fit: BoxFit.cover,
                 );
               },
