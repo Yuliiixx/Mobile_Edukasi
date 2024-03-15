@@ -1,16 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:mobile_edukasi/home.dart';
 import 'package:mobile_edukasi/galeri.dart';
 import 'package:mobile_edukasi/pegawai.dart';
 import 'package:mobile_edukasi/profil.dart';
 
 class BottomNavigation extends StatefulWidget {
+  final String initialRoute;
+
+  BottomNavigation(this.initialRoute);
+
   @override
   _BottomNavigationState createState() => _BottomNavigationState();
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
+
+  String initialRoute = "";
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    var logger = Logger();
+    initialRoute = widget.initialRoute;
+    logger.d("Data dari push :: $initialRoute");
+
+    // Pengecekan nilai initialRoute
+    if (initialRoute == "pegawai") {
+      setState(() {
+        _selectedIndex = 2;
+      });
+    }else if(initialRoute=="profil"){
+      setState(() {
+        _selectedIndex = 3;
+      });
+    } else {
+      setState(() {
+        _selectedIndex = 0;
+      });
+    }
+  }
+
 
   final List<Widget> _pages = [
     HomePage(),

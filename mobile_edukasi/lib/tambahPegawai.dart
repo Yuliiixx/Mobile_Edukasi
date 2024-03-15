@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile_edukasi/bottomNavBar.dart';
 import 'package:mobile_edukasi/utils/api_url.dart';
 
 class TambahDataPegawai extends StatefulWidget {
@@ -18,6 +19,7 @@ class _TambahDataPegawaiState extends State<TambahDataPegawai> {
     final String apiUrl = '${ApiUrl().baseUrl}pegawai.php'; // Ganti dengan URL backend Anda
 
     final response = await http.post(Uri.parse(apiUrl), body: {
+      'action' : "tambah",
       'nama': _controllerNama.text,
       'no_bp': _controllerNoBP.text,
       'no_hp': _controllerNoHP.text,
@@ -34,6 +36,12 @@ class _TambahDataPegawaiState extends State<TambahDataPegawai> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Data pegawai berhasil ditambahkan')),
       );
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => BottomNavigation("pegawai")),
+              (route) => false
+      );
+
     } else {
       // Jika permintaan gagal, tampilkan pesan error
       ScaffoldMessenger.of(context).showSnackBar(
