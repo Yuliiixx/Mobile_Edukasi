@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:mobile_edukasi/login.dart';
-import 'package:mobile_edukasi/home.dart';
 import 'package:mobile_edukasi/utils/api_url.dart';
 import 'models/model_base.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<RegisterPage> createState() => _RegisterPage();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPage extends State<RegisterPage> {
+class _RegisterPageState extends State<RegisterPage> {
   TextEditingController txtNama = TextEditingController();
   TextEditingController txtAlamat = TextEditingController();
   TextEditingController txtNoTelpon = TextEditingController();
@@ -21,43 +20,46 @@ class _RegisterPage extends State<RegisterPage> {
   TextEditingController txtPassword = TextEditingController();
   var logger = Logger();
   bool isLoading = false;
+  final _formKey = GlobalKey<FormState>();
+
   Future<ModelBase?> register() async {
-    try {
-      isLoading = true;
-      // http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
-      http.Response res =
-          await http.post(Uri.parse('${ApiUrl().baseUrl}auth.php'), body: {
-        "tambah_user": "1",
-        "username": txtUsername.text,
-        "password": txtPassword.text,
-        "nama_user": txtNama.text,
-        "alamat_user": txtAlamat.text,
-        "nohp_user": txtNoTelpon.text
-      });
-      ModelBase data = modelBaseFromJson(res.body);
-      if (data.sukses) {
+    if (_formKey.currentState!.validate()) {
+      try {
+        isLoading = true;
+        http.Response res =
+            await http.post(Uri.parse('${ApiUrl().baseUrl}auth.php'), body: {
+          "tambah_user": "1",
+          "username": txtUsername.text,
+          "password": txtPassword.text,
+          "nama_user": txtNama.text,
+          "alamat_user": txtAlamat.text,
+          "nohp_user": txtNoTelpon.text
+        });
+        ModelBase data = modelBaseFromJson(res.body);
+        if (data.sukses) {
+          setState(() {
+            isLoading = false;
+          });
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(data.pesan)));
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+              (route) => false);
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(data.pesan)));
+        }
+      } catch (e) {
         setState(() {
           isLoading = false;
         });
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(data.pesan)));
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-            (route) => false);
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(data.pesan)));
+            .showSnackBar(SnackBar(content: Text(e.toString())));
       }
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 
@@ -65,133 +67,141 @@ class _RegisterPage extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 50),
-            Image.asset(
-              'images/logo.png', // Ganti dengan path gambar logo Anda
-              height: 150,
-              width: 150,
-            ),
-            SizedBox(height: 30),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                controller: txtNama,
-                decoration: InputDecoration(
-                  labelText: 'Nama Lengkap',
-                  border: OutlineInputBorder(),
-                ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              SizedBox(height: 50),
+              Image.asset(
+                'images/logo.png', // Ganti dengan path gambar logo Anda
+                height: 150,
+                width: 150,
               ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                controller: txtAlamat,
-                decoration: InputDecoration(
-                  labelText: 'Alamat',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                controller: txtNoTelpon,
-                decoration: InputDecoration(
-                  labelText: 'Nomor Telepon',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.phone,
-              ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                controller: txtUsername,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                obscureText: true,
-                controller: txtPassword,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            // SizedBox(height: 20),
-            // Container(
-            //   width: double.infinity,
-            //   margin: EdgeInsets.symmetric(horizontal: 20),
-            //   child: ElevatedButton(
-            //     onPressed: () {
-            //       // Tambahkan logika untuk pendaftaran di sini
-            //       register();
-            //     },
-            //     style: ElevatedButton.styleFrom(
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(10.0),
-            //       ), backgroundColor: Colors.blue[900], // Ubah warna tombol di sini
-            //     ),
-            //     child: Padding(
-            //       padding: EdgeInsets.all(12.0),
-            //       child: Text('Register', style: TextStyle(color: Colors.white)),
-            //     ),
-            //   ),
-            // ),
-            SizedBox(height: 20),
-            Center(
-              child: isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : MaterialButton(
-                      minWidth: 150,
-                      height: 45,
-                      onPressed: () {
-                        logger.d("data");
-
-                       
-                        register();
-                      },
-                      color: Colors.blue[900],
-                      child:
-                          Text('Register', style: TextStyle(color: Colors.white)),
-                    ),
-            ),
-
-            SizedBox(height: 10),
-            GestureDetector(
-              onTap: () {
-                // Tambahkan navigasi untuk halaman login di sini
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-              child: Container(
-                margin: EdgeInsets.only(top: 10.0),
-                child: Text(
-                  'Sudah punya akun? Silahkan login',
-                  style: TextStyle(
-                    color: Colors.blue[900],
-                    decoration: TextDecoration.underline,
+              SizedBox(height: 30),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: TextFormField(
+                  controller: txtNama,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Nama tidak boleh kosong';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Nama Lengkap',
+                    border: OutlineInputBorder(),
                   ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 20),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: TextFormField(
+                  controller: txtAlamat,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Alamat tidak boleh kosong';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Alamat',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: TextFormField(
+                  controller: txtNoTelpon,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Nomor Telepon tidak boleh kosong';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Nomor Telepon',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.phone,
+                ),
+              ),
+              SizedBox(height: 20),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: TextFormField(
+                  controller: txtUsername,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Username tidak boleh kosong';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Username',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: TextFormField(
+                  obscureText: true,
+                  controller: txtPassword,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Password tidak boleh kosong';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Center(
+                child: isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : MaterialButton(
+                        minWidth: 150,
+                        height: 45,
+                        onPressed: () {
+                          register();
+                        },
+                        color: Colors.blue[900],
+                        child: Text('Register',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+              ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: 10.0),
+                  child: Text(
+                    'Sudah punya akun? Silahkan login',
+                    style: TextStyle(
+                      color: Colors.blue[900],
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
