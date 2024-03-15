@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:mobile_edukasi/bottomNavBar.dart';
@@ -144,6 +142,7 @@ class __LoginPageState extends State<LoginPage>{
                   child: Text('Login', style: TextStyle(color: Colors.white)),
                 ),
             ),
+            SizedBox(height: 20), // Menambahkan spasi di sini
             GestureDetector(
               onTap: () {
                 // Tambahkan navigasi untuk halaman pendaftaran di sini

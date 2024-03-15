@@ -3,10 +3,8 @@ import 'package:mobile_edukasi/editPegawai.dart';
 // import 'package:intl/intl.dart';
 import 'models/model_pegawai.dart';
 
-
 class PageDetailPegawai extends StatelessWidget {
   final Datum? data;
-  
 
   const PageDetailPegawai(this.data, {Key? key}) : super(key: key);
 
@@ -30,7 +28,7 @@ class PageDetailPegawai extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => EditDataPegawaiScreen(data, id: '',),
+                  builder: (context) => EditDataPegawai(data),
                 ),
               );
             },

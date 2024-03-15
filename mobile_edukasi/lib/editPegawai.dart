@@ -1,72 +1,95 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:mobile_edukasi/models/model_pegawai.dart';
+import 'models/model_base.dart';
+import 'package:mobile_edukasi/utils/api_url.dart';
 
-class EditDataPegawai extends StatelessWidget {
-  final Datum? data;
+class EditDataPegawaiScreen extends StatefulWidget {
+  final String id;
 
-  const EditDataPegawai(this.data, {Key? key}) : super(key: key);
+  const EditDataPegawaiScreen(Datum? data, {Key? key, required this.id}) : super(key: key);
+
+  @override
+  _EditDataPegawaiScreenState createState() => _EditDataPegawaiScreenState();
+}
+
+class _EditDataPegawaiScreenState extends State<EditDataPegawaiScreen> {
+  TextEditingController namaController = TextEditingController();
+  TextEditingController noBpController = TextEditingController();
+  TextEditingController noHpController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+
+  Future<ModelBase> updateDataPegawai() async {
+    final response = await http.put(
+      Uri.parse('${ApiUrl().baseUrl}pegawai.php/${widget.id}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'nama': namaController.text,
+        'no_bp': noBpController.text,
+        'no_hp': noHpController.text,
+        'email': emailController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return ModelBase.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to update data');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _controllerNama =
-        TextEditingController(text: data?.namaPegawai);
-    TextEditingController _controllerNoBP =
-        TextEditingController(text: data?.noBp);
-    TextEditingController _controllerNoHP =
-        TextEditingController(text: data?.noHp);
-    TextEditingController _controllerEmail =
-        TextEditingController(text: data?.emailPegawai);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Edit Data Pegawai',
-          style: TextStyle(
-            color: Colors.white,
-          ), // Ubah warna teks menjadi putih
-        ),
-        backgroundColor: Colors.blue[900],
+        title: Text('Edit Data Pegawai'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
-              controller: _controllerNama,
+              controller: namaController,
               decoration: InputDecoration(labelText: 'Nama Pegawai'),
             ),
-            SizedBox(height: 12.0),
             TextField(
-              controller: _controllerNoBP,
+              controller: noBpController,
               decoration: InputDecoration(labelText: 'Nomor BP'),
             ),
-            SizedBox(height: 12.0),
             TextField(
-              controller: _controllerNoHP,
+              controller: noHpController,
               decoration: InputDecoration(labelText: 'Nomor HP'),
             ),
-            SizedBox(height: 12.0),
             TextField(
-              controller: _controllerEmail,
+              controller: emailController,
               decoration: InputDecoration(labelText: 'Email'),
             ),
-            SizedBox(height: 12.0),
+            SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // Mendapatkan nilai yang diubah dari setiap field
-                String editedNama = _controllerNama.text;
-                String editedNoBP = _controllerNoBP.text;
-                String editedNoHP = _controllerNoHP.text;
-                String editedEmail = _controllerEmail.text;
-
-                // Implementasi logika penyuntingan data pegawai
-                // Anda dapat menambahkan logika penyimpanan ke database atau tempat penyimpanan lainnya di sini
+                updateDataPegawai().then((response) {
+                  if (response.sukses) {
+                    // Handle success
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(response.pesan)),
+                    );
+                  } else {
+                    // Handle error
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(response.pesan)),
+                    );
+                  }
+                }).catchError((error) {
+                  // Handle error
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to update data')),
+                  );
+                });
               },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.blue[900], // Warna teks putih
-              ),
               child: Text('Simpan Perubahan'),
             ),
           ],
@@ -75,3 +98,4 @@ class EditDataPegawai extends StatelessWidget {
     );
   }
 }
+

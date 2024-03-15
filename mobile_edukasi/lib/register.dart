@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:mobile_edukasi/login.dart';
 import 'package:mobile_edukasi/home.dart';
 import 'package:mobile_edukasi/utils/api_url.dart';
@@ -19,42 +19,45 @@ class _RegisterPage extends State<RegisterPage> {
   TextEditingController txtNoTelpon = TextEditingController();
   TextEditingController txtUsername = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
-
+  var logger = Logger();
   bool isLoading = false;
-  Future<ModelBase?> register() async{
-    try{
+  Future<ModelBase?> register() async {
+    try {
       isLoading = true;
       // http.Response res = await http.post(Uri.parse('http://192.30.35.126/edukasi/auth.php'),
-      http.Response res = await http.post(Uri.parse('${ApiUrl().baseUrl}auth.php'),
-        body: {
-          "tambah_user":"1",
-          "username":txtUsername.text,
-          "password":txtPassword.text,
-          "nama_user":txtNama.text,
-          "alamat_user":txtAlamat.text,
-          "nohp_user":txtNoTelpon.text
-        });
+      http.Response res =
+          await http.post(Uri.parse('${ApiUrl().baseUrl}auth.php'), body: {
+        "tambah_user": "1",
+        "username": txtUsername.text,
+        "password": txtPassword.text,
+        "nama_user": txtNama.text,
+        "alamat_user": txtAlamat.text,
+        "nohp_user": txtNoTelpon.text
+      });
       ModelBase data = modelBaseFromJson(res.body);
-      if(data.sukses){
+      if (data.sukses) {
         setState(() {
           isLoading = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data.pesan)));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(data.pesan)));
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context)=>LoginPage()),
-                (route) => false);
-      }else{
+            MaterialPageRoute(builder: (context) => LoginPage()),
+            (route) => false);
+      } else {
         setState(() {
           isLoading = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data.pesan)));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(data.pesan)));
       }
-    }catch(e){
+    } catch (e) {
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 
@@ -127,17 +130,47 @@ class _RegisterPage extends State<RegisterPage> {
                 ),
               ),
             ),
+            // SizedBox(height: 20),
+            // Container(
+            //   width: double.infinity,
+            //   margin: EdgeInsets.symmetric(horizontal: 20),
+            //   child: ElevatedButton(
+            //     onPressed: () {
+            //       // Tambahkan logika untuk pendaftaran di sini
+            //       register();
+            //     },
+            //     style: ElevatedButton.styleFrom(
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(10.0),
+            //       ), backgroundColor: Colors.blue[900], // Ubah warna tombol di sini
+            //     ),
+            //     child: Padding(
+            //       padding: EdgeInsets.all(12.0),
+            //       child: Text('Register', style: TextStyle(color: Colors.white)),
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Tambahkan logika untuk pendaftaran di sini
-                register();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue[900], // Ubah warna tombol di sini
-              ),
-              child: Text('Register', style: TextStyle(color: Colors.white)),
+            Center(
+              child: isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : MaterialButton(
+                      minWidth: 150,
+                      height: 45,
+                      onPressed: () {
+                        logger.d("data");
+
+                       
+                        register();
+                      },
+                      color: Colors.blue[900],
+                      child:
+                          Text('Register', style: TextStyle(color: Colors.white)),
+                    ),
             ),
+
             SizedBox(height: 10),
             GestureDetector(
               onTap: () {
@@ -147,11 +180,14 @@ class _RegisterPage extends State<RegisterPage> {
                   MaterialPageRoute(builder: (context) => LoginPage()),
                 );
               },
-              child: Text(
-                'Sudah punya akun? Silahkan login',
-                style: TextStyle(
-                  color: Colors.blue[900],
-                  decoration: TextDecoration.underline,
+              child: Container(
+                margin: EdgeInsets.only(top: 10.0),
+                child: Text(
+                  'Sudah punya akun? Silahkan login',
+                  style: TextStyle(
+                    color: Colors.blue[900],
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
               ),
             ),

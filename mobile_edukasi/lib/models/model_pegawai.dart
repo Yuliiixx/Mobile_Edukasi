@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final modelBerita = modelBeritaFromJson(jsonString);
-
 import 'dart:convert';
 
 ModelPegawai modelPegawaiFromJson(String str) => ModelPegawai.fromJson(json.decode(str));
