@@ -20,43 +20,45 @@ class _EditDataPegawaiScreenState extends State<EditDataPegawaiScreen> {
   TextEditingController noBpController = TextEditingController();
   TextEditingController noHpController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>(); // GlobalKey untuk Form
 
   Future<void> _editDataPegawai() async {
-    final String apiUrl = '${ApiUrl().baseUrl}pegawai.php'; // Ganti dengan URL backend Anda
+    // Pemeriksaan validitas Form
+    if (_formKey.currentState!.validate()) {
+      final String apiUrl = '${ApiUrl().baseUrl}pegawai.php'; // Ganti dengan URL backend Anda
+      final response = await http.post(Uri.parse(apiUrl), body: {
+        'id_pegawai': idPegawai,
+        'nama': namaController.text,
+        'no_bp': noBpController.text,
+        'no_hp': noHpController.text,
+        'email': emailController.text,
+        'action': 'edit',
+      });
 
-    final response = await http.post(Uri.parse(apiUrl), body: {
-      'id_pegawai' : idPegawai,
-      'nama': namaController.text,
-      'no_bp': noBpController.text,
-      'no_hp': noHpController.text,
-      'email': emailController.text,
-      'action': 'edit',
-    });
+      if (response.statusCode == 200) {
+        // Jika permintaan berhasil, bersihkan input dan tampilkan pesan sukses
+        namaController.clear();
+        noBpController.clear();
+        noHpController.clear();
+        emailController.clear();
 
-    if (response.statusCode == 200) {
-      // Jika permintaan berhasil, bersihkan input dan tampilkan pesan sukses
-      namaController.clear();
-      noBpController.clear();
-      noHpController.clear();
-      emailController.clear();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Data pegawai berhasil ditambahkan')),
+        );
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => BottomNavigation("pegawai")),
+                (route) => false
+        );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data pegawai berhasil ditambahkan')),
-      );
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => BottomNavigation("pegawai")),
-              (route) => false
-      );
-
-    } else {
-      // Jika permintaan gagal, tampilkan pesan error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menambahkan data pegawai')),
-      );
+      } else {
+        // Jika permintaan gagal, tampilkan pesan error
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal menambahkan data pegawai')),
+        );
+      }
     }
   }
-
 
   @override
   void initState() {
@@ -71,26 +73,6 @@ class _EditDataPegawaiScreenState extends State<EditDataPegawaiScreen> {
       emailController.text = widget.data!.emailPegawai ?? "";
     }
   }
-  Future<ModelBase> updateDataPegawai() async {
-    final response = await http.put(
-      Uri.parse('${ApiUrl().baseUrl}pegawai.php/${widget.id}'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'nama': namaController.text,
-        'no_bp': noBpController.text,
-        'no_hp': noHpController.text,
-        'email': emailController.text,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      return ModelBase.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to update data');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,36 +82,67 @@ class _EditDataPegawaiScreenState extends State<EditDataPegawaiScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: namaController,
-              decoration: InputDecoration(labelText: 'Nama Pegawai'),
-            ),
-            TextField(
-              controller: noBpController,
-              decoration: InputDecoration(labelText: 'Nomor BP'),
-            ),
-            TextField(
-              controller: noHpController,
-              decoration: InputDecoration(labelText: 'Nomor HP'),
-            ),
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                _editDataPegawai();
-              },
-              child: Text('Simpan Perubahan'),
-            ),
-          ],
+        child: Form( // Wrap Column dengan Form
+          key: _formKey, // Assign GlobalKey<Form>
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField( // Menggunakan TextFormField untuk validasi
+                controller: namaController,
+                decoration: InputDecoration(labelText: 'Nama Pegawai'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Nama pegawai tidak boleh kosong';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: noBpController,
+                decoration: InputDecoration(labelText: 'Nomor BP'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Nomor BP tidak boleh kosong';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: noHpController,
+                decoration: InputDecoration(labelText: 'Nomor HP'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Nomor HP tidak boleh kosong';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(labelText: 'Email'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Email tidak boleh kosong';
+                  }
+                  // Anda juga dapat menambahkan validasi email jika diinginkan
+                  // Contoh validasi email:
+                  // if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                  //   return 'Email tidak valid';
+                  // }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  _editDataPegawai();
+                },
+                child: Text('Simpan Perubahan'),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-

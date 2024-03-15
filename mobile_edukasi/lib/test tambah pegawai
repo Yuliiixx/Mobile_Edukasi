@@ -1,4 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:mobile_edukasi/bottomNavBar.dart';
+import 'package:mobile_edukasi/utils/api_url.dart';
 
 class TambahDataPegawai extends StatefulWidget {
   @override
@@ -11,6 +15,41 @@ class _TambahDataPegawaiState extends State<TambahDataPegawai> {
   TextEditingController _controllerNoHP = TextEditingController();
   TextEditingController _controllerEmail = TextEditingController();
 
+  Future<void> _tambahDataPegawai() async {
+    final String apiUrl = '${ApiUrl().baseUrl}pegawai.php'; // Ganti dengan URL backend Anda
+
+    final response = await http.post(Uri.parse(apiUrl), body: {
+      'action' : "tambah",
+      'nama': _controllerNama.text,
+      'no_bp': _controllerNoBP.text,
+      'no_hp': _controllerNoHP.text,
+      'email': _controllerEmail.text,
+    });
+
+    if (response.statusCode == 200) {
+      // Jika permintaan berhasil, bersihkan input dan tampilkan pesan sukses
+      _controllerNama.clear();
+      _controllerNoBP.clear();
+      _controllerNoHP.clear();
+      _controllerEmail.clear();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Data pegawai berhasil ditambahkan')),
+      );
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => BottomNavigation("pegawai")),
+              (route) => false
+      );
+
+    } else {
+      // Jika permintaan gagal, tampilkan pesan error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal menambahkan data pegawai')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +61,6 @@ class _TambahDataPegawaiState extends State<TambahDataPegawai> {
           ), // Ubah warna teks menjadi putih
         ),
         backgroundColor: Colors.blue[900],
-        
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -56,32 +94,10 @@ class _TambahDataPegawaiState extends State<TambahDataPegawai> {
             ),
             SizedBox(height: 5.0),
             ElevatedButton(
-              onPressed: () {
-                // Aksi untuk menyimpan data, misalnya menyimpan ke database atau melakukan tindakan lainnya
-                String nama = _controllerNama.text;
-                String noBP = _controllerNoBP.text;
-                String noHP = _controllerNoHP.text;
-                String email = _controllerEmail.text;
-
-                // Di sini Anda dapat menambahkan logika untuk menyimpan data
-                print('Nama: $nama');
-                print('Nomor BP: $noBP');
-                print('Nomor HP: $noHP');
-                print('Email: $email');
-
-                // Bersihkan input setelah menyimpan data
-                _controllerNama.clear();
-                _controllerNoBP.clear();
-                _controllerNoHP.clear();
-                _controllerEmail.clear();
-
-                // Beritahu pengguna bahwa data telah ditambahkan
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Data pegawai berhasil ditambahkan')),
-                );
-              },
+              onPressed: _tambahDataPegawai,
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: Colors.blue[900], // Mengatur warna teks menjadi putih
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blue[900],
               ),
               child: Text('Simpan'),
             ),
