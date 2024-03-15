@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${data.pesan}')));
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => BottomNavigation()),
+              MaterialPageRoute(builder: (context) => BottomNavigation("home")),
               (route) => false,
             );
           });

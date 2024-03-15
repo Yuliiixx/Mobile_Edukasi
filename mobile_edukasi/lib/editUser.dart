@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile_edukasi/bottomNavBar.dart';
 import 'package:mobile_edukasi/login.dart';
 import 'package:mobile_edukasi/home.dart';
 import 'package:mobile_edukasi/utils/api_url.dart';
@@ -64,8 +65,13 @@ class _EditUser extends State<EditUser> {
             txtNoTelpon.text
         );
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data.pesan)));
-        Navigator.of(context).pop();
-      }else{
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => BottomNavigation("profil")),
+                (route) => false
+        );
+
+    }else{
         setState(() {
           isLoading = false;
         });
