@@ -43,7 +43,7 @@ class _EditDataPegawaiScreenState extends State<EditDataPegawaiScreen> {
         emailController.clear();
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Data pegawai berhasil ditambahkan')),
+          SnackBar(content: Text('Data pegawai berhasil diupdate')),
         );
         Navigator.pushAndRemoveUntil(
             context,
@@ -133,10 +133,19 @@ class _EditDataPegawaiScreenState extends State<EditDataPegawaiScreen> {
                 },
               ),
               SizedBox(height: 16),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     _editDataPegawai();
+                  
+              //   },
+              //   child: Text('Simpan Perubahan'),
+              // ),
               ElevatedButton(
-                onPressed: () {
-                  _editDataPegawai();
-                },
+                onPressed: _editDataPegawai,
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blue[900],
+                ),
                 child: Text('Simpan Perubahan'),
               ),
             ],
