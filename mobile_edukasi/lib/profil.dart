@@ -107,25 +107,6 @@ class _Profil extends State<Profil> {
                 minWidth: 150,
                 height: 45,
                 onPressed: () {
-                  sessionManager.clearSession();
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                          (route) => false
-                  );
-                },
-                color: Colors.red[900],
-                child: Text('Logout', style: TextStyle(color: Colors.white)),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: MaterialButton(
-                minWidth: 150,
-                height: 45,
-                onPressed: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => EditUser())
@@ -137,7 +118,27 @@ class _Profil extends State<Profil> {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: MaterialButton(
+                minWidth: 150,
+                height: 45,
+                onPressed: () {
+                  sessionManager.clearSession();
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                          (route) => false
+                  );
+                },
+                color: Colors.red[900],
+                child: Text('Logout', style: TextStyle(color: Colors.white)),
+              ),
             )
+
           ]),
         ),
       ),
